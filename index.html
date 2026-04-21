@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steam & Co. — Coffee Specialist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────────
+       CSS VARIABLES & RESET
+    ───────────────────────────────────────────── */
+    :root {
+      --espresso:   #1C1008;
+      --walnut:     #2C1A0E;
+      --mocha:      #4A2E18;
+      --creme-dark: #7A5B3E;
+      --creme-light:#C4A07C;
+      --linen:      #EDE0CF;
+      --text-light: #F5EDE0;
+      --text-muted: #B89A7A;
+      --gold:       #D4A96A;
+
+      --ff-display: 'Playfair Display', Georgia, serif;
+      --ff-body:    'Jost', sans-serif;
+      --ff-accent:  'Cormorant Garamond', serif;
+
+      --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--ff-body);
+      background: var(--espresso);
+      color: var(--text-light);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─────────────────────────────────────────────
+       NAVBAR
+    ───────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 5%;
+      background: rgba(28, 16, 8, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(196, 160, 124, 0.12);
+      transition: padding var(--transition);
+    }
+
+    .nav.scrolled { padding: 0.9rem 5%; }
+
+    .nav__logo {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .nav__logo-main {
+      font-family: var(--ff-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--linen);
+    }
+
+    .nav__logo-sub {
+      font-family: var(--ff-accent);
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--creme-light);
+      font-weight: 300;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 2.4rem;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color var(--transition);
+      font-weight: 500;
+    }
+
+    .nav__links a:hover { color: var(--linen); }
+
+    .nav__cta {
+      background: transparent;
+      border: 1px solid var(--creme-light);
+      color: var(--creme-light);
+      padding: 0.5rem 1.4rem;
+      font-family: var(--ff-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-weight: 500;
+    }
+
+    .nav__cta:hover {
+      background: var(--creme-light);
+      color: var(--espresso);
+    }
+
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav__hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--creme-light);
+      transition: all var(--transition);
+    }
+
+    /* ─────────────────────────────────────────────
+       HERO SECTION
+    ───────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      background: var(--espresso);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Layered background effects */
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 70% 50%, rgba(74, 46, 24, 0.45) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 20% 80%, rgba(44, 26, 14, 0.6) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 60% at 50% 10%, rgba(28, 16, 8, 0.8) 0%, transparent 70%);
+    }
+
+    /* Coffee steam blur orbs */
+    .hero__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .hero__orb--1 {
+      width: 420px; height: 420px;
+      background: rgba(196, 160, 124, 0.10);
+      top: -100px; right: 10%;
+      animation: floatOrb 8s ease-in-out infinite;
+    }
+
+    .hero__orb--2 {
+      width: 280px; height: 280px;
+      background: rgba(122, 91, 62, 0.14);
+      bottom: 15%; left: 5%;
+      animation: floatOrb 11s ease-in-out infinite reverse;
+    }
+
+    .hero__orb--3 {
+      width: 180px; height: 180px;
+      background: rgba(212, 169, 106, 0.08);
+      top: 40%; left: 50%;
+      animation: floatOrb 7s ease-in-out infinite 2s;
+    }
+
+    @keyframes floatOrb {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* Coffee image visual right side */
+    .hero__visual {
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 50%;
+      background:
+        linear-gradient(to right, var(--espresso) 0%, rgba(28,16,8,0.3) 30%, transparent 60%),
+        url("triple.png") center/cover no-repeat;
+      opacity: 0.55;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      width: 90%;
+      margin: 0 auto;
+      padding-top: 6rem;
+    }
+
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-family: var(--ff-accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--creme-light);
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.3s forwards;
+    }
+
+    .hero__eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--creme-light);
+    }
+
+    .hero__headline {
+      font-family: var(--ff-display);
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 700;
+      line-height: 1.06;
+      color: var(--linen);
+      max-width: 620px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.5s forwards;
+    }
+
+    .hero__headline em {
+      font-style: italic;
+      color: var(--creme-light);
+    }
+
+    .hero__sub {
+      font-family: var(--ff-accent);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 420px;
+      margin-top: 1.4rem;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.7s forwards;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.8rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+
+    .btn-primary {
+      background: var(--creme-light);
+      color: var(--espresso);
+      border: none;
+      padding: 0.85rem 2.2rem;
+      font-family: var(--ff-body);
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-100%);
+      transition: transform 0.4s ease;
+    }
+
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(196, 160, 124, 0.3); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--linen);
+      border: 1px solid rgba(245, 237, 224, 0.3);
+      padding: 0.85rem 2.2rem;
+      font-family: var(--ff-body);
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--creme-light);
+      color: var(--creme-light);
+    }
+
+    .hero__scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.5s forwards;
+    }
+
+    .hero__scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--creme-light), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0%, 100% { opacity: 0.5; transform: scaleY(0.6); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    .hero__badge {
+      position: absolute;
+      right: 8%;
+      bottom: 12%;
+      width: 120px; height: 120px;
+      border: 1px solid rgba(196, 160, 124, 0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: rotateBadge 20s linear infinite;
+      opacity: 0;
+      animation: rotateBadge 20s linear infinite, fadeIn 1s ease 1.2s forwards;
+    }
+
+    .hero__badge svg {
+      width: 120px; height: 120px;
+    }
+
+    @keyframes rotateBadge {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ─────────────────────────────────────────────
+       TICKER / MARQUEE
+    ───────────────────────────────────────────── */
+    .ticker {
+      background: var(--walnut);
+      border-top: 1px solid rgba(196, 160, 124, 0.15);
+      border-bottom: 1px solid rgba(196, 160, 124, 0.15);
+      padding: 0.85rem 0;
+      overflow: hidden;
+    }
+
+    .ticker__track {
+      display: flex;
+      gap: 0;
+      animation: ticker 25s linear infinite;
+      width: max-content;
+    }
+
+    .ticker__item {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 0 2.4rem;
+      font-family: var(--ff-accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      color: var(--creme-light);
+      white-space: nowrap;
+    }
+
+    .ticker__dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ─────────────────────────────────────────────
+       VALUES SECTION
+    ───────────────────────────────────────────── */
+    .section {
+      padding: 7rem 5%;
+    }
+
+    .section--values {
+      background: var(--walnut);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section--values::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 60% at 80% 50%, rgba(74, 46, 24, 0.4) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .section__container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section__label {
+      font-family: var(--ff-accent);
+      font-size: 0.75rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .section__label::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--gold);
+    }
+
+    .section__title {
+      font-family: var(--ff-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--linen);
+      max-width: 520px;
+      margin-bottom: 4rem;
+    }
+
+    .section__title em {
+      font-style: italic;
+      color: var(--creme-light);
+    }
+
+    .values__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .value-card {
+      background: rgba(28, 16, 8, 0.3);
+      padding: 2.4rem 1.8rem;
+      border: 1px solid rgba(196, 160, 124, 0.08);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .value-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition);
+    }
+
+    .value-card:hover::before { transform: scaleX(1); }
+
+    .value-card:hover {
+      background: rgba(74, 46, 24, 0.3);
+      transform: translateY(-4px);
+    }
+
+    .value-card__icon {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .value-card__number {
+      font-family: var(--ff-accent);
+      font-size: 2.5rem;
+      color: rgba(196, 160, 124, 0.15);
+      font-weight: 300;
+      position: absolute;
+      top: 1.2rem; right: 1.4rem;
+      line-height: 1;
+    }
+
+    .value-card__title {
+      font-family: var(--ff-display);
+      font-size: 1.1rem;
+      color: var(--linen);
+      margin-bottom: 0.7rem;
+      font-weight: 500;
+    }
+
+    .value-card__text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────────
+       PRODUCTS SECTION
+    ───────────────────────────────────────────── */
+    .section--products {
+      background: var(--mocha);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section--products::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 10% 30%, rgba(28, 16, 8, 0.5) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 90% 80%, rgba(44, 26, 14, 0.4) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .products__tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid rgba(196, 160, 124, 0.15);
+    }
+
+    .products__tab {
+      padding: 0.8rem 1.8rem;
+      font-family: var(--ff-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all var(--transition);
+      font-weight: 500;
+    }
+
+    .products__tab.active,
+    .products__tab:hover {
+      color: var(--creme-light);
+      border-bottom-color: var(--gold);
+    }
+
+    .products__panel { display: none; }
+    .products__panel.active { display: block; }
+
+    .products__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+    }
+
+    .product-card {
+      background: rgba(28, 16, 8, 0.4);
+      border: 1px solid rgba(196, 160, 124, 0.07);
+      overflow: hidden;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      border-color: rgba(196, 160, 124, 0.25);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+
+    .product-card__image {
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+      background: var(--walnut);
+    }
+
+    .product-card__image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+      filter: brightness(0.8) saturate(1.1);
+    }
+
+    .product-card:hover .product-card__image img {
+      transform: scale(1.07);
+    }
+
+    .product-card__badge {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: rgba(28, 16, 8, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(196, 160, 124, 0.2);
+      padding: 0.25rem 0.7rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--creme-light);
+    }
+
+    .product-card__body {
+      padding: 1.5rem 1.6rem 1.8rem;
+    }
+
+    .product-card__name {
+      font-family: var(--ff-display);
+      font-size: 1.05rem;
+      color: var(--linen);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .product-card__desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .product-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(196, 160, 124, 0.1);
+    }
+
+    .product-card__temp {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .temp-tag {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid rgba(196, 160, 124, 0.2);
+      color: var(--creme-light);
+    }
+
+    .product-card__arrow {
+      width: 28px; height: 28px;
+      border: 1px solid rgba(196, 160, 124, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--creme-light);
+      font-size: 0.8rem;
+      transition: all var(--transition);
+    }
+
+    .product-card:hover .product-card__arrow {
+      background: var(--creme-light);
+      color: var(--espresso);
+      border-color: var(--creme-light);
+    }
+
+    /* ─────────────────────────────────────────────
+       STORY SECTION
+    ───────────────────────────────────────────── */
+    .section--story {
+      background: var(--creme-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section--story::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 30% 50%, rgba(28, 16, 8, 0.35) 0%, transparent 60%),
+        url('https://images.unsplash.com/photo-1442975631134-f27a1b86d07e?w=1400&q=70') center/cover no-repeat;
+      opacity: 0.18;
+    }
+
+    .story__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .story__visual {
+      position: relative;
+    }
+
+    .story__img-wrap {
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .story__img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75) saturate(1.1);
+    }
+
+    .story__img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(28,16,8,0.6) 0%, transparent 50%);
+    }
+
+    .story__img-caption {
+      position: absolute;
+      bottom: 1.8rem; left: 1.8rem;
+      right: 1.8rem;
+    }
+
+    .story__year {
+      font-family: var(--ff-display);
+      font-size: 5rem;
+      font-weight: 700;
+      color: rgba(237, 224, 207, 0.12);
+      line-height: 1;
+      position: absolute;
+      top: -2rem; left: -1rem;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .story__stat-box {
+      position: absolute;
+      bottom: -2rem; right: -2rem;
+      background: var(--espresso);
+      padding: 1.5rem 2rem;
+      border: 1px solid rgba(196, 160, 124, 0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .story__stat-num {
+      font-family: var(--ff-display);
+      font-size: 2.4rem;
+      color: var(--creme-light);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .story__stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .story__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .story__body {
+      font-family: var(--ff-accent);
+      font-size: 1.1rem;
+      color: var(--linen);
+      line-height: 1.85;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .story__quote {
+      border-left: 2px solid var(--gold);
+      padding-left: 1.4rem;
+      font-family: var(--ff-display);
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--creme-light);
+      margin: 2rem 0;
+      line-height: 1.5;
+    }
+
+    .story__stats-row {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(196, 160, 124, 0.2);
+    }
+
+    .story__inline-stat { }
+
+    .story__inline-num {
+      font-family: var(--ff-display);
+      font-size: 2rem;
+      color: var(--linen);
+      font-weight: 700;
+    }
+
+    .story__inline-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ─────────────────────────────────────────────
+       TESTIMONIALS
+    ───────────────────────────────────────────── */
+    .section--testimonials {
+      background: var(--creme-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section--testimonials::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(196, 160, 124, 0.3) 0%, transparent 70%);
+    }
+
+    .section--testimonials .section__label,
+    .section--testimonials .section__title {
+      color: var(--espresso);
+    }
+
+    .section--testimonials .section__label { color: var(--mocha); }
+    .section--testimonials .section__label::before { background: var(--mocha); }
+
+    .testimonials__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+    }
+
+    .testi-card {
+      background: rgba(255,255,255,0.35);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(28, 16, 8, 0.08);
+      padding: 2.2rem;
+      transition: all var(--transition);
+    }
+
+    .testi-card:hover {
+      background: rgba(255,255,255,0.55);
+      transform: translateY(-4px);
+    }
+
+    .testi-card__quote-icon {
+      font-family: var(--ff-display);
+      font-size: 4rem;
+      line-height: 0.8;
+      color: var(--mocha);
+      opacity: 0.25;
+      margin-bottom: 0.8rem;
+    }
+
+    .testi-card__text {
+      font-family: var(--ff-accent);
+      font-size: 1rem;
+      color: var(--walnut);
+      line-height: 1.75;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+
+    .testi-card__author {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .testi-card__avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--mocha);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-display);
+      font-size: 1rem;
+      color: var(--linen);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .testi-card__name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--espresso);
+      letter-spacing: 0.05em;
+    }
+
+    .testi-card__role {
+      font-size: 0.72rem;
+      color: var(--creme-dark);
+      letter-spacing: 0.08em;
+      margin-top: 0.15rem;
+    }
+
+    .testi-card__stars {
+      color: var(--gold);
+      font-size: 0.7rem;
+      margin-top: 0.2rem;
+      letter-spacing: 2px;
+    }
+
+    /* ─────────────────────────────────────────────
+       CTA SECTION
+    ───────────────────────────────────────────── */
+    .section--cta {
+      background: var(--linen);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 5%;
+    }
+
+    .section--cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 50% 50%, rgba(196, 160, 124, 0.35) 0%, transparent 65%);
+    }
+
+    .cta__inner {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta__big-text {
+      font-family: var(--ff-display);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--espresso);
+      margin-bottom: 1.4rem;
+    }
+
+    .cta__big-text em {
+      font-style: italic;
+      color: var(--mocha);
+    }
+
+    .cta__sub {
+      font-family: var(--ff-accent);
+      font-size: 1.05rem;
+      color: var(--creme-dark);
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    .cta__actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-dark {
+      background: var(--espresso);
+      color: var(--linen);
+      border: 1px solid var(--espresso);
+      padding: 0.9rem 2.4rem;
+      font-family: var(--ff-body);
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-dark:hover {
+      background: var(--walnut);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(28, 16, 8, 0.3);
+    }
+
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--espresso);
+      border: 1px solid var(--espresso);
+      padding: 0.9rem 2.4rem;
+      font-family: var(--ff-body);
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-outline-dark:hover {
+      background: var(--espresso);
+      color: var(--linen);
+    }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    .footer {
+      background: var(--espresso);
+      border-top: 1px solid rgba(196, 160, 124, 0.12);
+      padding: 5rem 5% 2.5rem;
+    }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 4rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid rgba(196, 160, 124, 0.1);
+    }
+
+    .footer__brand-name {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--linen);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.3rem;
+    }
+
+    .footer__brand-tag {
+      font-family: var(--ff-accent);
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--creme-light);
+      font-weight: 300;
+    }
+
+    .footer__about {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-top: 1.2rem;
+      max-width: 280px;
+    }
+
+    .footer__socials {
+      display: flex;
+      gap: 0.7rem;
+      margin-top: 1.5rem;
+    }
+
+    .footer__social {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(196, 160, 124, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+
+    .footer__social:hover {
+      border-color: var(--creme-light);
+      color: var(--creme-light);
+    }
+
+    .footer__col-title {
+      font-family: var(--ff-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--creme-light);
+      font-weight: 600;
+      margin-bottom: 1.4rem;
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .footer__links a {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      transition: color var(--transition);
+    }
+
+    .footer__links a:hover { color: var(--linen); }
+
+    .footer__contact p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer__copy {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .footer__tagline {
+      font-family: var(--ff-accent);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ─────────────────────────────────────────────
+       MOBILE NAV OVERLAY
+    ───────────────────────────────────────────── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 16, 8, 0.97);
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu__close {
+      position: absolute;
+      top: 1.5rem; right: 5%;
+      background: none;
+      border: none;
+      color: var(--linen);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .mobile-menu a {
+      font-family: var(--ff-display);
+      font-size: 2rem;
+      color: var(--linen);
+      transition: color var(--transition);
+    }
+
+    .mobile-menu a:hover { color: var(--creme-light); }
+
+    /* ─────────────────────────────────────────────
+       SCROLL REVEAL
+    ───────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .values__grid { grid-template-columns: repeat(2, 1fr); }
+      .products__grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials__grid { grid-template-columns: repeat(2, 1fr); }
+      .footer__top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .story__inner { grid-template-columns: 1fr; gap: 3rem; }
+      .story__stat-box { right: 1rem; }
+    }
+
+    @media (max-width: 768px) {
+      .nav__links, .nav__cta { display: none; }
+      .nav__hamburger { display: flex; }
+
+      .hero__visual { width: 100%; opacity: 0.2; }
+
+      .values__grid { grid-template-columns: 1fr; }
+      .products__grid { grid-template-columns: 1fr; }
+      .testimonials__grid { grid-template-columns: 1fr; }
+      .footer__top { grid-template-columns: 1fr; }
+
+      .products__tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .hero__badge { display: none; }
+
+      .section { padding: 5rem 5%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ──────────────────────────────────── -->
+  <nav class="nav" id="navbar">
+    <a href="#" class="nav__logo">
+      <span class="nav__logo-main">Steam &amp; Co.</span>
+      <span class="nav__logo-sub">Coffee Specialist</span>
+    </a>
+
+    <ul class="nav__links">
+      <li><a href="#values">Our Values</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+    </ul>
+
+    <button class="nav__cta btn-primary" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Explore Menu</button>
+
+    <button class="nav__hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── MOBILE MENU ─────────────────────────────── -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu__close" id="closeMenu">✕</button>
+    <a href="#values" onclick="closeMobileMenu()">Our Values</a>
+    <a href="#menu" onclick="closeMobileMenu()">Menu</a>
+    <a href="#story" onclick="closeMobileMenu()">Our Story</a>
+    <a href="#testimonials" onclick="closeMobileMenu()">Reviews</a>
+  </div>
+
+  <!-- ── HERO ────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero__bg"></div>
+    <div class="hero__orb hero__orb--1"></div>
+    <div class="hero__orb hero__orb--2"></div>
+    <div class="hero__orb hero__orb--3"></div>
+    <div class="hero__visual"></div>
+
+    <div class="hero__content">
+      <span class="hero__eyebrow">Est. 2023 · Coffee Specialist</span>
+      <h1 class="hero__headline">Crafted <em>Coffee,</em><br>Elevated Experience.</h1>
+      <p class="hero__sub">More than a cup — it's a ritual. Steam &amp; Co. brings specialty coffee to those who appreciate the difference.</p>
+      <div class="hero__actions">
+        <button class="btn-primary" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Explore Menu</button>
+        <button class="btn-ghost" onclick="document.getElementById('story').scrollIntoView({behavior:'smooth'})">
+          Our Story <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Rotating badge -->
+    <div class="hero__badge" aria-hidden="true">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="circle-text" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/>
+        </defs>
+        <text font-family="'Jost', sans-serif" font-size="9.5" fill="#C4A07C" letter-spacing="3.5" font-weight="500">
+          <textPath href="#circle-text">SPECIALTY · COFFEE · SPECIALIST · STEAM &amp; CO. ·</textPath>
+        </text>
+        <circle cx="60" cy="60" r="6" fill="none" stroke="#C4A07C" stroke-width="1" opacity="0.5"/>
+        <circle cx="60" cy="60" r="2" fill="#C4A07C" opacity="0.7"/>
+      </svg>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ── TICKER ───────────────────────────────────── -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <!-- duplicated for seamless loop -->
+      <span class="ticker__item"><span class="ticker__dot"></span> Specialty Grade Beans</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Single Origin Selection</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Signature Blends</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Manual Brew Mastery</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Premium Coffee Experience</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Consistent Every Cup</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Est. 2023 · Purwokerto</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Specialty Grade Beans</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Single Origin Selection</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Signature Blends</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Manual Brew Mastery</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Premium Coffee Experience</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Consistent Every Cup</span>
+      <span class="ticker__item"><span class="ticker__dot"></span> Est. 2023 · Purwokerto</span>
+    </div>
+  </div>
+
+  <!-- ── VALUES ──────────────────────────────────── -->
+  <section class="section section--values" id="values">
+    <div class="section__container">
+      <span class="section__label reveal">Why Steam &amp; Co.</span>
+      <h2 class="section__title reveal">Everything begins<br>with <em>intention.</em></h2>
+
+      <div class="values__grid">
+        <div class="value-card reveal">
+          <span class="value-card__icon">☕</span>
+          <span class="value-card__number">01</span>
+          <h3 class="value-card__title">Specialty Beans</h3>
+          <p class="value-card__text">Kami hanya menggunakan biji kopi grade specialty yang dipilih langsung dari petani terpercaya — kualitas di setiap biji.</p>
+        </div>
+        <div class="value-card reveal">
+          <span class="value-card__icon">⚗️</span>
+          <span class="value-card__number">02</span>
+          <h3 class="value-card__title">Racikan Signature</h3>
+          <p class="value-card__text">Setiap menu dikembangkan oleh barista kami selama berbulan-bulan. Bukan sekadar kopi — tapi karya yang terasa.</p>
+        </div>
+        <div class="value-card reveal">
+          <span class="value-card__icon">🎯</span>
+          <span class="value-card__number">03</span>
+          <h3 class="value-card__title">Konsistensi Rasa</h3>
+          <p class="value-card__text">Cangkir pertama dan cangkir keseribu rasanya sama. Presisi bukan hanya standar — itu komitmen kami kepada Anda.</p>
+        </div>
+        <div class="value-card reveal">
+          <span class="value-card__icon">✨</span>
+          <span class="value-card__number">04</span>
+          <h3 class="value-card__title">Premium Experience</h3>
+          <p class="value-card__text">Dari aroma hingga tegukan terakhir, Steam &amp; Co. menghadirkan pengalaman yang lebih dari sekadar minum kopi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRODUCTS ─────────────────────────────────── -->
+  <section class="section section--products" id="menu">
+    <div class="section__container">
+      <span class="section__label reveal">Our Menu</span>
+      <h2 class="section__title reveal">Pilihan yang <em>diracik</em><br>untuk Anda.</h2>
+
+      <div class="products__tabs">
+        <button class="products__tab active" onclick="switchTab(event, 'manual')">Manual Brew</button>
+        <button class="products__tab" onclick="switchTab(event, 'espresso')">Espresso Based</button>
+        <button class="products__tab" onclick="switchTab(event, 'signature')">Milk &amp; Signature</button>
+      </div>
+
+      <!-- MANUAL BREW -->
+      <div class="products__panel active" id="panel-manual">
+        <div class="products__grid">
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="menu1.jpg" alt="Pour Over V60" loading="lazy" />
+              <span class="product-card__badge">Manual Brew</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Pour Over (V60) | Rp 28.000</h3>
+              <p class="product-card__desc">Metode seduh manual yang menonjolkan keasaman dan aroma bunga dari single origin pilihan. Setiap tuang adalah ritual tersendiri.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Hot</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="coldbrew.jpg" alt="Cold Brew" loading="lazy" />
+              <span class="product-card__badge">Manual Brew</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Cold Brew | Rp 30.000</h3>
+              <p class="product-card__desc">Diseduh dingin selama 12 jam untuk profil rasa yang halus, smooth, dan rendah asam. Segar dengan kedalaman rasa yang tak biasa.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Ice</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="tubruk.png" alt="Kopi Tubruk" loading="lazy" />
+              <span class="product-card__badge">Manual Brew</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Kopi Tubruk | Rp 20.000</h3>
+              <p class="product-card__desc">Warisan kopi Nusantara yang kami hadirkan kembali dengan biji specialty. Bold, kuat, dan jujur — seperti kopi seharusnya.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Hot</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESPRESSO BASED -->
+      <div class="products__panel" id="panel-espresso">
+        <div class="products__grid">
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="espresso.jpg" alt="Espresso" loading="lazy" />
+              <span class="product-card__badge">Espresso</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Espresso | Rp 18.000</h3>
+              <p class="product-card__desc">Diekstrak sempurna dalam 27 hinnga 30 detik. Crema tebal, body penuh, dan aftertaste dark chocolate yang membekas lama.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Hot</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="americano.png" alt="Americano" loading="lazy" />
+              <span class="product-card__badge">Espresso</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Americano | Rp 22.000</h3>
+              <p class="product-card__desc">Espresso diencerkan dengan air panas — menghasilkan kopi yang ringan di tenggorokan namun tetap kaya dalam karakter rasa.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Hot</span>
+                  <span class="temp-tag">Ice</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIGNATURE -->
+      <div class="products__panel" id="panel-signature">
+        <div class="products__grid">
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="latte.png" alt="Cafe Latte" loading="lazy" />
+              <span class="product-card__badge">Milk Based</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Cafe Latte | Rp 28.000</h3>
+              <p class="product-card__desc">Perpaduan espresso dengan steamed milk yang silky — ringan, creamy, dan selalu konsisten. Favorit yang tak pernah salah.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Hot</span>
+                  <span class="temp-tag">Ice</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="caramel.png" alt="Caramel Latte" loading="lazy" />
+              <span class="product-card__badge">Signature</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Caramel Latte | Rp 32.000</h3>
+              <p class="product-card__desc">Espresso, steamed milk, dan caramel sauce handmade yang manis seimbang — bukan terlalu manis, tapi cukup untuk membuat betah.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Hot</span>
+                  <span class="temp-tag">Ice</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="butterscotch.png" alt="Butterscotch" loading="lazy" />
+              <span class="product-card__badge">Signature</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Butterscotch | Rp 34.000</h3>
+              <p class="product-card__desc">Kreasi signature Steam &amp; Co. — kopi dingin bertemu butterscotch yang kaya dan sedikit smoky. Unik, dan susah dilupakan.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Ice</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal">
+            <div class="product-card__image">
+              <img src="affogato.png" alt="Affogato" loading="lazy" />
+              <span class="product-card__badge">Signature</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Affogato | Rp 30.000</h3>
+              <p class="product-card__desc">Espresso panas dituang di atas es krim vanilla premium — perpaduan pahit dan manis yang paling elegan dari semua menu kami.</p>
+              <div class="product-card__footer">
+                <div class="product-card__temp">
+                  <span class="temp-tag">Ice</span>
+                </div>
+                <div class="product-card__arrow">→</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── STORY ────────────────────────────────────── -->
+  <section class="section section--story" id="story">
+    <div class="section__container">
+      <div class="story__inner">
+        <div class="story__visual reveal">
+          <div class="story__year">2023</div>
+          <div class="story__img-wrap">
+            <img src="mockup1.png" alt="Steam & Co. origin story" loading="lazy" />
+            <div class="story__img-overlay"></div>
+            <div class="story__img-caption">
+              <p style="font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--creme-light);">Purwokerto, Indonesia</p>
+            </div>
+          </div>
+          <div class="story__stat-box">
+            <div class="story__stat-num">5+</div>
+            <div class="story__stat-label">Stars Quality</div>
+          </div>
+        </div>
+
+        <div class="story__content reveal">
+          <span class="section__label">Our Story</span>
+          <h2 class="section__title">Lahir dari cinta<br>pada <em>kopi yang jujur.</em></h2>
+
+          <p class="story__body">
+            Steam &amp; Co. dimulai dari sebuah kedai kecil di sudut Purwokerto pada 2023. Bukan dengan modal besar — tapi dengan satu mesin espresso, dua tangan, dan keyakinan bahwa kopi yang baik tidak perlu berteriak keras untuk dikenali.
+          </p>
+
+          <blockquote class="story__quote">
+            "Kami percaya kopi terbaik adalah yang membuat Anda berhenti sejenak — dan benar-benar merasakannya."
+          </blockquote>
+
+          <p class="story__body" style="margin-bottom:0;">
+            Setelah 3 tahun kemudian, Steam &amp; Co. telah melayani ribuan pelanggan setia dengan prinsip yang sama: biji terbaik, racikan presisi, dan pengalaman yang tidak terburu-buru.
+          </p>
+
+          <div class="story__stats-row">
+            <div class="story__inline-stat">
+              <div class="story__inline-num">5+</div>
+              <div class="story__inline-label">Stars Quality</div>
+            </div>
+            <div class="story__inline-stat">
+              <div class="story__inline-num">12</div>
+              <div class="story__inline-label">Menu Signature</div>
+            </div>
+            <div class="story__inline-stat">
+              <div class="story__inline-num">5K+</div>
+              <div class="story__inline-label">Happy Customers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TESTIMONIALS ─────────────────────────────── -->
+  <section class="section section--testimonials" id="testimonials">
+    <div class="section__container">
+      <span class="section__label reveal">What People Say</span>
+      <h2 class="section__title reveal" style="color:var(--espresso);">Mereka yang sudah merasakannya<br></h2>
+
+      <div class="testimonials__grid">
+        <div class="testi-card reveal">
+          <div class="testi-card__quote-icon">"</div>
+          <p class="testi-card__text">Rasanya konsisten banget, selalu jadi andalan sebelum kerja. Udah hampir 3 tahun tiap pagi mampir, belum pernah kecewa.</p>
+          <div class="testi-card__author">
+            <div class="testi-card__avatar">AR</div>
+            <div>
+              <div class="testi-card__name">Arya Ramadhan</div>
+              <div class="testi-card__role">Software Engineer</div>
+              <div class="testi-card__stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <div class="testi-card__quote-icon">"</div>
+          <p class="testi-card__text">Butterscotch-nya beda dari coffee shop lain. Ada smoky undertone yang bikin ketagihan. Susah nemu yang kayak gini di tempat lain.</p>
+          <div class="testi-card__author">
+            <div class="testi-card__avatar">DN</div>
+            <div>
+              <div class="testi-card__name">Dina Nuraini</div>
+              <div class="testi-card__role">Creative Director</div>
+              <div class="testi-card__stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <div class="testi-card__quote-icon">"</div>
+          <p class="testi-card__text">Saya orang yang picky soal kopi, dan Steam &amp; Co. selalu lewati ekspektasi saya. Pour over-nya ekstrasi sempurna tiap kali.</p>
+          <div class="testi-card__author">
+            <div class="testi-card__avatar">BK</div>
+            <div>
+              <div class="testi-card__name">Bagas Kurniawan</div>
+              <div class="testi-card__role">Architect & Coffee Enthusiast</div>
+              <div class="testi-card__stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <div class="testi-card__quote-icon">"</div>
+          <p class="testi-card__text">Tempat meeting favorit saya. Kopi bagus, suasana tenang, dan barista-nya paham kalau kita lagi butuh fokus. Highly recommended.</p>
+          <div class="testi-card__author">
+            <div class="testi-card__avatar">SL</div>
+            <div>
+              <div class="testi-card__name">Sinta Larasati</div>
+              <div class="testi-card__role">Brand Consultant</div>
+              <div class="testi-card__stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <div class="testi-card__quote-icon">"</div>
+          <p class="testi-card__text">Cold brew-nya worth it banget. Smooth, ga asam, dan efeknya tahan lama. Serius jadi ritual pagi saya setiap Senin.</p>
+          <div class="testi-card__author">
+            <div class="testi-card__avatar">FP</div>
+            <div>
+              <div class="testi-card__name">Fadhlan Pratama</div>
+              <div class="testi-card__role">Product Manager</div>
+              <div class="testi-card__stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ──────────────────────────────────────── -->
+  <section class="section--cta" id="cta">
+    <div class="cta__inner reveal">
+      <h2 class="cta__big-text">Ready for your next<br><em>great cup?</em></h2>
+      <p class="cta__sub">Kunjungi kami atau pesan sekarang. Satu tegukan cukup untuk paham bedanya.</p>
+      <div class="cta__actions">
+        <button class="btn-dark">Order Now</button>
+        <button class="btn-outline-dark">Find Our Location</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ───────────────────────────────────── -->
+  <footer class="footer">
+    <div class="section__container">
+      <div class="footer__top">
+        <div>
+          <div class="footer__brand-name">Steam &amp; Co.</div>
+          <div class="footer__brand-tag">Coffee Specialist · Est. 2023</div>
+          <p class="footer__about">
+            Kami percaya bahwa kopi terbaik adalah yang membuat Anda berhenti sejenak dan benar-benar merasakannya. Setiap cangkir adalah janji kami kepada Anda.
+          </p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social" aria-label="Instagram">ig</a>
+            <a href="#" class="footer__social" aria-label="TikTok">tk</a>
+            <a href="#" class="footer__social" aria-label="Twitter">tw</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Navigate</h4>
+          <ul class="footer__links">
+            <li><a href="#values">Our Values</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#story">Our Story</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Menu</h4>
+          <ul class="footer__links">
+            <li><a href="#menu">Manual Brew</a></li>
+            <li><a href="#menu">Espresso Based</a></li>
+            <li><a href="#menu">Milk &amp; Signature</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__contact">
+          <h4 class="footer__col-title">Find Us</h4>
+          <p>📍 Jl. DI Panjaitan No.128<br>&nbsp;&nbsp;&nbsp;&nbsp;Purwokerto Selatan, 12730</p>
+          <p>🕐 Mon–Sun: 07.00 – 22.00</p>
+          <p>📱 @steamandco.id</p>
+          <p>✉️ steamandco@gmail.com</p>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copy">© 2024 Steam &amp; Co. All rights reserved.</p>
+        <p class="footer__tagline">Crafted Coffee, Elevated Experience.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── JAVASCRIPT ───────────────────────────────── -->
+  <script>
+    // ─── Navbar scroll effect ───────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ─── Mobile menu ────────────────────────────────
+    const hamburger = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = document.getElementById('closeMenu');
+
+    hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
+    closeMenu.addEventListener('click', closeMobileMenu);
+    mobileMenu.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) closeMobileMenu();
+    });
+
+    function closeMobileMenu() { mobileMenu.classList.remove('open'); }
+
+    // ─── Product tabs ────────────────────────────────
+    function switchTab(e, panelId) {
+      document.querySelectorAll('.products__tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.products__panel').forEach(p => p.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      document.getElementById('panel-' + panelId).classList.add('active');
+      // Re-trigger reveal for new panel items
+      setTimeout(() => {
+        document.querySelectorAll('#panel-' + panelId + ' .reveal').forEach(el => {
+          el.classList.add('visible');
+        });
+      }, 50);
+    }
+
+    // ─── Scroll reveal ───────────────────────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // stagger siblings slightly
+          const siblings = entry.target.parentElement?.querySelectorAll('.reveal');
+          let delay = 0;
+          if (siblings) {
+            siblings.forEach((sib, idx) => { if (sib === entry.target) delay = idx * 80; });
+          }
+          setTimeout(() => entry.target.classList.add('visible'), delay);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ─── Ticker duplicate check ───────────────────────
+    // Already duplicated in HTML for seamless infinite scroll
+  </script>
+
+</body>
+</html>
